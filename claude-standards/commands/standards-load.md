@@ -1,6 +1,6 @@
 # Load Claude Development Standards
 
-Load specified Claude development standards into the current session. This command intelligently selects and applies appropriate prompt standards based on project requirements and application scenarios.
+Install Claude development standards to the project by creating a `.claude/CLAUDE.md` file. This is a one-time setup that persists across all sessions for the current project.
 
 ## Usage
 
@@ -11,11 +11,11 @@ Load specified Claude development standards into the current session. This comma
 ## Options
 
 ### Standard Types
-- `--all`: Load all standard modules (default)
-- `--language`: Load only language expression standards
-- `--principles`: Load only core work principles
-- `--socratic`: Load only Socratic dialogue standards
-- `--analysis`: Load only technical analysis framework
+- `--all`: Install all standard modules (default)
+- `--language`: Install only language expression standards
+- `--principles`: Install only core work principles
+- `--socratic`: Install only Socratic dialogue standards
+- `--analysis`: Install only technical analysis framework
 
 ### Application Scenarios
 - `--code-review`: Code review scenario optimized configuration
@@ -25,74 +25,87 @@ Load specified Claude development standards into the current session. This comma
 
 ### Configuration Options
 - `--interactive`: Interactive selection of standard configuration
-- `--force`: Force reload, overriding existing configuration
-- `--dry-run`: Preview standards to be loaded without actually applying
+- `--force`: Force overwrite existing CLAUDE.md file
+- `--dry-run`: Preview standards to be installed without actually applying
 
 ## Examples
 
 ```bash
-# Load all standards
+# Install all standards (recommended)
 /standards-load
 
-# Load standards specifically for code review scenario
+# Install standards specifically for code review scenario
 /standards-load --code-review
 
 # Interactive selection of standards
 /standards-load --interactive
 
-# Load only language and technical analysis standards
+# Install only language and technical analysis standards
 /standards-load --language --analysis
+
+# Force overwrite existing configuration
+/standards-load --force
 ```
 
 ## Features
 
-### Intelligent Standard Selection
-- Automatically recommend standard combinations based on current project type
-- Adjust configuration based on recently used tools and commands
-- Detect file types and application scenarios to optimize prompts
+### One-Time Installation
+- Creates `.claude/CLAUDE.md` in your project root
+- Standards persist across all sessions
+- No need to reload standards for each new session
 
-### Configuration Persistence
-- Save standard configuration to project locally
-- Support team sharing of standard configurations
-- Versioned standard update mechanism
+### Modular Selection
+- Choose which standard modules to install
+- Scenario-specific configurations available
+- Interactive selection for custom combinations
 
-### Conflict Detection
-- Detect configuration conflicts with other plugins
-- Provide conflict resolution suggestions
-- Support configuration priority settings
+### File Management
+- Automatically creates `.claude` directory if needed
+- Overwrites existing CLAUDE.md when using `--force`
+- Preserves existing configuration without `--force`
 
 ## Output Format
 
-### Successful Load
+### Successful Installation
 ```
-✅ Claude development standards loaded successfully
+✅ Claude development standards installed successfully
+✅ Development standards written to: /path/to/project/.claude/CLAUDE.md
 
-📋 Loaded standard modules:
-├── Language Expression Standards (en-US, direct sharp style)
-├── Core Work Principles (quality-oriented, architecture-aware)
-├── Socratic Dialogue (smart activation)
-└── Technical Analysis Framework (systematic analysis)
+📋 Installed standard modules:
+├── Language Expression Standards (中文交流，直接犀利风格)
+├── Core Work Principles (质量导向，架构感知)
+├── Socratic Dialogue (深度质疑，智能激活)
+└── Technical Analysis Framework (系统性分析框架)
 
 ⚙️ Configuration details:
-- Primary language: English
-- Expression style: Direct, zero-fluff
-- Quality gates: Strict mode
-- Dialogue mode: Smart activation
+- Primary language: 中文
+- Expression style: 直接、零废话
+- Quality gates: 严格模式
+- Dialogue mode: 智能激活
 
 💡 Usage tips:
-- Use keywords like "why" to trigger deep discussions
+- Standards are now persistent across all sessions
+- Use '为什么'等关键词触发深度讨论
 - Code reviews will automatically apply quality gate checks
 - Technical analysis will use systematic framework
 ```
 
 ### Interactive Selection
 ```
-🎯 Please select standard modules to load:
+🎯 请选择要安装的规范模块:
 
-1. Language Expression Standards - English communication, direct sharp style
-2. Core Work Principles - Quality-oriented, architecture-aware
-3. Socratic Dialogue - Deep questioning, smart activation
-4. Technical Analysis Framework - Systematic analysis tools
+1. language-standards - 中文交流，直接犀利风格
+2. work-principles - 质量导向，架构感知
+3. socratic-dialogue - 深度质疑，智能激活
+4. technical-analysis - 系统性分析框架
 
-Please enter numbers to select (comma-separated for multiple, or select 0 to load all):
+请输入数字选择 (多选用逗号分隔，或选择0安装全部):
 ```
+
+## Important Notes
+
+- **One-time setup**: This command only needs to be run once per project
+- **File location**: Standards are installed to `.claude/CLAUDE.md` in your project root
+- **Overwrite protection**: Existing files are not overwritten unless `--force` is used
+- **Session persistence**: Once installed, standards automatically apply to all future sessions
+- **Project-specific**: Each project can have its own standards configuration

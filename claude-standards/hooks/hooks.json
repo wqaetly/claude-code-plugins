@@ -1,17 +1,5 @@
 {
   "hooks": {
-    "PostSessionStart": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/standards-load --auto",
-            "description": "Auto-load development standards when session starts"
-          }
-        ]
-      }
-    ],
     "PreToolUse": [
       {
         "matcher": "Write|Edit",
