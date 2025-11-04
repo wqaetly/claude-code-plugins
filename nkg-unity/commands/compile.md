@@ -1,6 +1,6 @@
 ---
 allowed-tools: Bash(dotnet build:*), Bash(dotnet:*), Bash(find:*), Bash(grep:*), Read, Edit, Write, Glob
-argument-hint: [assembly-name-or-alias]
+argument-hint: [assembly-name-or-alias-or-path]
 description: Compile Unity C# assembly with intelligent name matching and auto-fix errors
 ---
 
@@ -9,7 +9,9 @@ description: Compile Unity C# assembly with intelligent name matching and auto-f
 You are to compile the specified Unity C# assembly using `dotnet build` and automatically fix any compilation errors that occur.
 
 ## Parameters
-- `$1`: The name, alias, or partial name of the Unity assembly/project to compile
+- `$1`: The name, alias, partial name, or **direct path** of the Unity assembly/project to compile
+  - **Path mode**: If `$1` is a valid .csproj file path (relative or absolute), use it directly
+  - **Name mode**: If `$1` is a name/alias, use intelligent matching to find the project
 - `$ARGUMENTS`: All arguments passed to the command
 
 ## Your Task
@@ -29,10 +31,11 @@ You are to compile the specified Unity C# assembly using `dotnet build` and auto
 - **editor-firstpass/editor-preimport** → `Assembly-CSharp-Editor-firstpass`
 
 ### Assembly Discovery Process
-1. **Direct Match**: Try exact match with assembly name
-2. **Alias Resolution**: Map common aliases to actual assembly names
-3. **Fuzzy Matching**: Search for partial matches in available projects
-4. **Unity Standards**: Check for standard Unity assembly naming patterns
+1. **Path Detection**: If `$1` is a valid .csproj file path, use it directly (highest priority)
+2. **Direct Match**: Try exact match with assembly name
+3. **Alias Resolution**: Map common aliases to actual assembly names
+4. **Fuzzy Matching**: Search for partial matches in available projects
+5. **Unity Standards**: Check for standard Unity assembly naming patterns
 
 ### Available Projects Analysis:
 Available C# projects: !`find . -name "*.csproj" -type f | head -10`
@@ -104,18 +107,22 @@ Provide a comprehensive report including:
 - Final build status
 - Any remaining manual fixes needed
 
+## Input Type Detection:
+Check if input is a valid path: !`if [ -f "$1" ] && [[ "$1" == *.csproj ]]; then echo "PATH_MODE: $1"; else echo "NAME_MODE: $1"; fi`
+
 ## Current Build Status:
-Current dotnet build result: !`dotnet build "$1" --verbosity normal`
+Current dotnet build result: !`if [ -f "$1" ] && [[ "$1" == *.csproj ]]; then dotnet build "$1" --verbosity normal; else PROJECT=$(find . -name "*.csproj" -type f | grep -i "$1" | head -1); if [ -n "$PROJECT" ]; then dotnet build "$PROJECT" --verbosity normal; else echo "ERROR: No matching project found for '$1'"; fi; fi`
 
 ## Assembly Discovery Results:
-Found potential assemblies: !`find . -name "*.csproj" -type f | grep -i "$1" | head -5`
+Found potential assemblies: !`if [ -f "$1" ] && [[ "$1" == *.csproj ]]; then echo "Direct path mode - using: $1"; else find . -name "*.csproj" -type f | grep -i "$1" | head -5; fi`
 
 ## Best Match Analysis:
 The best matching assembly is determined by:
-1. Exact name matches to `$1`
-2. Common Unity assembly aliases
-3. Fuzzy string matching
-4. Unity naming conventions
+1. **Path validation** (if `$1` is a valid .csproj file path)
+2. Exact name matches to `$1`
+3. Common Unity assembly aliases
+4. Fuzzy string matching
+5. Unity naming conventions
 
 ## Safety Measures
 - Always create backups before modifying files
