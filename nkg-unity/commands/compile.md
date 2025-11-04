@@ -16,11 +16,15 @@ You are to compile the specified Unity C# assembly using `dotnet build` and auto
 
 ## Your Task
 
-1. **Smart Assembly Discovery**: Use intelligent matching to find the correct project file
-2. **Execute compilation**: Run dotnet build on the found project
+**CRITICAL**: First determine if input is a path or name (see "Input Analysis" section below)
+
+Then execute the compilation workflow:
+1. **Smart Assembly Discovery**: Use intelligent matching to find the correct project file (or use direct path)
+2. **Execute compilation**: Run `dotnet build` on the target project
 3. **Analyze errors**: Parse compilation errors and categorize them
 4. **Apply fixes**: Automatically fix common compilation errors
 5. **Rebuild**: Run compilation again to verify fixes
+6. **Report**: Summarize what was fixed
 
 ## Smart Assembly Name Matching
 
@@ -37,11 +41,6 @@ You are to compile the specified Unity C# assembly using `dotnet build` and auto
 4. **Fuzzy Matching**: Search for partial matches in available projects
 5. **Unity Standards**: Check for standard Unity assembly naming patterns
 
-### Available Projects Analysis:
-Available C# projects: !`find . -name "*.csproj" -type f | head -10`
-
-### Project Name Detection:
-Assembly name patterns detected: !`find . -name "*.csproj" -type f | sed 's/.*\///g' | sed 's/\.csproj$//g' | head -10`
 
 ## Error Analysis and Fix Strategy
 
@@ -75,46 +74,48 @@ If the build fails, analyze the errors and apply these fixes systematically:
 - Add missing arguments
 - Correct parameter order
 
-## Implementation Steps
+## Execution Workflow
+
+### Step 0: Input Type Detection (MUST DO FIRST)
+**Immediately check** if `$1` is a valid file path:
+```bash
+test -f "$1" && echo "PATH_MODE" || echo "NAME_MODE"
+```
+- If `PATH_MODE` and ends with `.csproj`: Set `TARGET_PROJECT="$1"`
+- If `NAME_MODE`: Use assembly discovery to find matching `.csproj` file
 
 ### Step 1: Initial Compilation
-Execute the build command and capture the output. Check if compilation succeeded or failed.
+Run `dotnet build <TARGET_PROJECT> --verbosity normal` and capture output.
 
-### Step 2: Error Parsing
-Parse the build output to extract:
+### Step 2: Error Analysis
+If build fails, parse output to extract:
 - Error codes (CSxxxx)
 - File paths and line numbers
 - Error descriptions
-- Method/property names causing issues
 
 ### Step 3: Apply Fixes
-For each error, apply the appropriate fix strategy:
+For each error:
 1. Read the problematic file
-2. Apply the fix based on error type
-3. Save the changes
-4. Document what was changed
+2. Apply fix based on error type (see "Error Analysis and Fix Strategy")
+3. Save changes
 
 ### Step 4: Verification
-Re-run the compilation to verify:
-- All errors are resolved
-- No new errors were introduced
-- Build succeeds completely
+Re-run compilation to confirm:
+- Errors resolved
+- No new errors introduced
 
-### Step 5: Reporting
-Provide a comprehensive report including:
+### Step 5: Report Results
+Summary including:
 - Initial error count
 - Fixes applied
 - Final build status
-- Any remaining manual fixes needed
 
-## Input Type Detection:
-Check if input is a valid path: !`if [ -f "$1" ] && [[ "$1" == *.csproj ]]; then echo "PATH_MODE: $1"; else echo "NAME_MODE: $1"; fi`
+## Context: Available Projects in Workspace
 
-## Current Build Status:
-Current dotnet build result: !`if [ -f "$1" ] && [[ "$1" == *.csproj ]]; then dotnet build "$1" --verbosity normal; else PROJECT=$(find . -name "*.csproj" -type f | grep -i "$1" | head -1); if [ -n "$PROJECT" ]; then dotnet build "$PROJECT" --verbosity normal; else echo "ERROR: No matching project found for '$1'"; fi; fi`
+All C# projects available for name matching:
+!`find . -name "*.csproj" -type f | head -20`
 
-## Assembly Discovery Results:
-Found potential assemblies: !`if [ -f "$1" ] && [[ "$1" == *.csproj ]]; then echo "Direct path mode - using: $1"; else find . -name "*.csproj" -type f | grep -i "$1" | head -5; fi`
+Use this list only if NAME_MODE is triggered (i.e., `$1` is not a valid file path).
 
 ## Best Match Analysis:
 The best matching assembly is determined by:
