@@ -4,10 +4,10 @@
   "description": "Claude Code English development standards plugin - Provides unified English communication, technical dialogue, and code quality standards",
   "author": "wqaetly",
   "license": "MIT",
-  "homepage": "https://github.com/wqaetly/ai_agent_for_skill",
+  "homepage": "https://github.com/wqaetly/claude-code-plugins",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wqaetly/ai_agent_for_skill"
+    "url": "https://github.com/wqaetly/claude-code-plugins"
   },
   "keywords": ["claude-code", "english standards", "development standards", "code quality", "technical dialogue"],
   "main": "prompts/language-standards.md",
