@@ -1,6 +1,6 @@
 # Load Claude Development Standards
 
-Install Claude development standards to the project by creating a `.claude/CLAUDE.md` file. This is a one-time setup that persists across all sessions for the current project.
+Install Claude development standards to user-level `~/.claude/CLAUDE.md`. This setup applies globally to all projects and persists across all sessions.
 
 ## Usage
 
@@ -8,104 +8,119 @@ Install Claude development standards to the project by creating a `.claude/CLAUD
 /standards-load [options]
 ```
 
+## Installation Location
+
+**User-level**: `~/.claude/CLAUDE.md` (Global - applies to ALL projects)
+
+This is different from project-level `.claude/CLAUDE.md` which only affects a single project. User-level configuration provides a baseline for all your projects.
+
 ## Options
 
-### Standard Types
-- `--all`: Install all standard modules (default)
-- `--language`: Install only language expression standards
-- `--principles`: Install only core work principles
-- `--socratic`: Install only Socratic dialogue standards
-- `--analysis`: Install only technical analysis framework
+### Basic Options
+- `--force`, `-f`: Force overwrite existing CLAUDE.md file
+- `--merge`, `-m`: Merge with existing CLAUDE.md (preserves original content)
+- `--backup`, `-b`: Backup before overwrite (saves to `.backup_TIMESTAMP`)
+- `--dry-run`, `-d`: Preview what will happen without making changes
+- `--uninstall`, `-u`: Remove Claude Standards Plugin content
 
-### Application Scenarios
-- `--code-review`: Code review scenario optimized configuration
-- `--architecture`: Architecture design scenario optimized configuration
-- `--planning`: Technical planning scenario optimized configuration
-- `--debugging`: Problem debugging scenario optimized configuration
+### Advanced Options
+- `--restore-backup <file>`: Restore from a specific backup file
+- `--plugin-root <path>`: Specify plugin root directory (auto-detected by default)
 
-### Configuration Options
-- `--interactive`: Interactive selection of standard configuration
-- `--force`: Force overwrite existing CLAUDE.md file
-- `--dry-run`: Preview standards to be installed without actually applying
+## Interactive Mode
+
+If `~/.claude/CLAUDE.md` already exists and no options are specified, you'll be prompted to choose:
+
+```
+⚠️  ~/.claude/CLAUDE.md 已存在
+📄 当前文件大小: 1234 字符
+
+请选择处理方式:
+  [O] Overwrite - 直接覆盖（丢失原有内容）
+  [M] Merge - 合并（保留原有内容，追加plugin标准）
+  [B] Backup - 备份后覆盖（保存原文件到 .backup）
+  [C] Cancel - 取消操作
+
+选择 [O/M/B/C]:
+```
 
 ## Examples
 
 ```bash
-# Install all standards (recommended)
+# Install (interactive if file exists)
 /standards-load
 
-# Install standards specifically for code review scenario
-/standards-load --code-review
-
-# Interactive selection of standards
-/standards-load --interactive
-
-# Install only language and technical analysis standards
-/standards-load --language --analysis
-
-# Force overwrite existing configuration
+# Force overwrite without prompting
 /standards-load --force
+
+# Merge with existing content
+/standards-load --merge
+
+# Backup before overwriting
+/standards-load --backup
+
+# Preview what will happen
+/standards-load --dry-run
+
+# Uninstall the plugin content
+/standards-load --uninstall
+
+# Restore from a specific backup
+/standards-load --restore-backup ~/.claude/CLAUDE.md.backup_20250104_120000
 ```
 
-## Features
+## What Happens
 
-### One-Time Installation
-- Creates `.claude/CLAUDE.md` in your project root
-- Standards persist across all sessions
-- No need to reload standards for each new session
-
-### Modular Selection
-- Choose which standard modules to install
-- Scenario-specific configurations available
-- Interactive selection for custom combinations
-
-### File Management
-- Automatically creates `.claude` directory if needed
-- Overwrites existing CLAUDE.md when using `--force`
-- Preserves existing configuration without `--force`
-
-## Output Format
-
-### Successful Installation
+### New Installation (file doesn't exist)
 ```
-✅ Claude development standards installed successfully
-✅ Development standards written to: /path/to/project/.claude/CLAUDE.md
-
-📋 Installed standard modules:
-├── Language Expression Standards (中文交流，直接犀利风格)
-├── Core Work Principles (质量导向，架构感知)
-├── Socratic Dialogue (深度质疑，智能激活)
-└── Technical Analysis Framework (系统性分析框架)
-
-⚙️ Configuration details:
-- Primary language: 中文
-- Expression style: 直接、零废话
-- Quality gates: 严格模式
-- Dialogue mode: 智能激活
-
-💡 Usage tips:
-- Standards are now persistent across all sessions
-- Use '为什么'等关键词触发深度讨论
-- Code reviews will automatically apply quality gate checks
-- Technical analysis will use systematic framework
+✅ 开发规范已创建: /home/user/.claude/CLAUDE.md
+💡 全局生效 - 所有项目的session都会自动应用这些标准
 ```
 
-### Interactive Selection
+### Merge Strategy
+- Preserves your existing content
+- Adds a separator: `<!-- Claude Standards Plugin - DO NOT EDIT BELOW THIS LINE -->`
+- Appends plugin standards below the separator
+- Subsequent merges will update plugin content without duplicating
+
+### Backup Strategy
 ```
-🎯 请选择要安装的规范模块:
+📦 已备份到: /home/user/.claude/CLAUDE.md.backup_20250104_153022
+✅ 开发规范已备份并覆盖: /home/user/.claude/CLAUDE.md
+💡 全局生效 - 所有项目的session都会自动应用这些标准
+```
 
-1. language-standards - 中文交流，直接犀利风格
-2. work-principles - 质量导向，架构感知
-3. socratic-dialogue - 深度质疑，智能激活
-4. technical-analysis - 系统性分析框架
+## Uninstalling
 
-请输入数字选择 (多选用逗号分隔，或选择0安装全部):
+```bash
+# Remove plugin content (preserves original content if merged)
+/standards-load --uninstall
+
+# Restore from backup
+/standards-load --uninstall --restore-backup ~/.claude/CLAUDE.md.backup_20250104_120000
 ```
 
 ## Important Notes
 
-- **One-time setup**: This command only needs to be run once per project
-- **File location**: Standards are installed to `.claude/CLAUDE.md` in your project root
-- **Overwrite protection**: Existing files are not overwritten unless `--force` is used
-- **Session persistence**: Once installed, standards automatically apply to all future sessions
-- **Project-specific**: Each project can have its own standards configuration
+- **Global scope**: Affects ALL projects, not just the current one
+- **Session persistence**: Standards apply automatically to all future sessions
+- **Priority**: Project-level `.claude/CLAUDE.md` takes precedence over user-level
+- **Safe merging**: Multiple installs with `--merge` won't duplicate content
+- **Backup naming**: Backups include timestamp for easy identification
+- **One-time setup**: Run once to apply globally, no need to run per project
+
+## File Structure After Merge
+
+```markdown
+# Your existing CLAUDE.md content
+...
+
+---
+<!-- Claude Standards Plugin - DO NOT EDIT BELOW THIS LINE -->
+
+# CLAUDE.md
+Claude Code 个人配置文件
+...
+```
+
+The separator makes it easy to identify and remove plugin content later.

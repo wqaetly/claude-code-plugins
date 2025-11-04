@@ -1,322 +1,279 @@
 # Claude Development Standards Plugin
 
-[![Plugin Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/wqaetly/ai_agent_for_skill)
+[![Plugin Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/wqaetly/ai_agent_for_skill)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Category](https://img.shields.io/badge/category-Code%20Quality-orange.svg)](https://claude.ai)
 
-Provides unified development standards for Claude Code, including language expression, work principles, Socratic dialogue, and technical analysis frameworks.
+A streamlined Claude Code plugin that installs unified development standards globally across all your projects.
 
-## 🌟 Core Features
+## 🌟 What It Does
 
-### 🗣️ Communication Standards
-- **Clarity First**: Prioritize clear, direct communication in all interactions and documentation
-- **Direct & Focused**: Eliminate unnecessary pleasantries, get straight to the core issues
-- **Technical Accuracy**: Maintain precise technical terminology with clear explanations
-- **Zero Fluff**: Every sentence should deliver substantial information value
+This plugin installs a comprehensive set of development standards to your user-level `~/.claude/CLAUDE.md` file, making them automatically available in **all** your Claude Code sessions across **all** projects.
 
-### ⚙️ Core Work Principles
-- **Context Priority**: Develop solutions based on existing technology stack and project constraints
-- **Quality Oriented**: Deliver high-quality, targeted solutions with attention to detail
-- **Architecture Awareness**: Incremental optimization, avoiding disruptive refactoring
-- **Technical Debt Management**: Balance fix costs against refactoring investments
+### 📋 Included Standards
 
-### 🤔 Socratic Dialogue Framework
-- **Smart Activation**: Automatically trigger deep discussions based on keyword detection
-- **Tiered Questioning**: Gentle inquiry → Deep questioning → Intense challenge
-- **Flow Control**: Prevent endless questioning with intelligent termination timing
-- **Constructive Challenge**: Every question should provide direction for improvement
-
-### 🔍 Technical Analysis Framework
-- **Data Structure Review**: Identify core data entities and their relationships
-- **Data Flow Tracking**: Analyze flow patterns, ownership, and modification permissions
-- **Efficiency Audit**: Identify redundant operations and performance bottlenecks
-- **Architecture Trade-offs**: Balance performance, maintainability, and scalability
+- **Language & Expression**: English-first communication, direct sharp style, zero fluff
+- **Core Work Principles**: Context priority, quality-oriented, architecture awareness
+- **Socratic Dialogue**: Smart activation for deep technical discussions
+- **Technical Analysis**: Systematic data structure and architecture analysis framework
 
 ## 🚀 Quick Start
 
-### Install Plugin
-```bash
-# Clone to Claude Code plugins directory
-git clone https://github.com/wqaetly/ai_agent_for_skill.git claude_code_plugins/claude-standards
+### Installation
 
-# Or copy plugin files to Claude Code plugins directory
+1. **Clone or copy the plugin to your Claude Code plugins directory:**
+
+```bash
+# Option 1: Clone repository
+git clone https://github.com/wqaetly/ai_agent_for_skill.git ~/.claude/plugins/claude-standards
+
+# Option 2: Manual copy
 cp -r claude-standards ~/.claude/plugins/
 ```
 
-### Basic Usage
+2. **Install standards (one-time setup):**
 
-#### 1. Load All Standards
 ```bash
 /standards-load
 ```
 
-#### 2. For Specific Scenarios
-```bash
-/standards-load --code-review    # Code review scenario
-/standards-load --architecture   # Architecture design scenario
-/standards-load --planning      # Technical planning scenario
-```
+That's it! The standards are now active in all your projects.
 
-#### 3. Interactive Selection
-```bash
-/standards-load --interactive
-```
+## 📖 Usage
 
-#### 4. Check Current Status
-```bash
-/standards-status
-/standards-status --detailed
-```
-
-#### 5. Configure Standard Parameters
-```bash
-/standards-config language --primary en-US
-/standards-config socratic --auto-activate true
-/standards-config quality --architecture-decay true
-```
-
-## 📋 Command Reference
-
-### `/standards-load` - Load Standards
+### Install Standards
 
 ```bash
-/standards-load [options]
+# First-time installation (interactive if file exists)
+/standards-load
+
+# Force overwrite existing file
+/standards-load --force
+
+# Merge with existing content
+/standards-load --merge
+
+# Backup before overwriting
+/standards-load --backup
+
+# Preview without installing
+/standards-load --dry-run
 ```
+
+### Uninstall Standards
+
+```bash
+# Remove plugin content (preserves original content)
+/standards-uninstall
+
+# Restore from backup
+/standards-uninstall --restore-backup ~/.claude/CLAUDE.md.backup_20250104_120000
+```
+
+## 🔧 How It Works
+
+### User-Level Installation
+
+The plugin installs to `~/.claude/CLAUDE.md` instead of project-level `.claude/CLAUDE.md`:
+
+- **Global scope**: Standards apply to ALL projects automatically
+- **Session persistence**: Once installed, works across all future sessions
+- **No per-project setup**: Install once, use everywhere
+- **Respects project configs**: Project-level CLAUDE.md still takes precedence if present
+
+### File Handling Options
+
+When `~/.claude/CLAUDE.md` already exists, you can:
+
+1. **Overwrite**: Replace entire file (loses original content)
+2. **Merge**: Append plugin standards, preserve original content
+3. **Backup**: Save original to `.backup_TIMESTAMP`, then overwrite
+4. **Cancel**: Abort installation
+
+### Merge Strategy
+
+When merging, the plugin adds a separator to mark its content:
+
+```markdown
+# Your existing CLAUDE.md content
+...
+
+---
+<!-- Claude Standards Plugin - DO NOT EDIT BELOW THIS LINE -->
+
+# CLAUDE.md
+Claude Code Development Standards
+...
+```
+
+This makes it easy to identify and remove plugin content later.
+
+## 📋 Commands
+
+### `/standards-load`
+
+Install development standards to user-level CLAUDE.md.
 
 **Options:**
-- `--all`: Load all standards modules (default)
-- `--language`: Load only communication standards
-- `--principles`: Load only core work principles
-- `--socratic`: Load only Socratic dialogue framework
-- `--analysis`: Load only technical analysis framework
-- `--code-review`: Code review scenario configuration
-- `--architecture`: Architecture design scenario configuration
-- `--planning`: Technical planning scenario configuration
-- `--interactive`: Interactive selection
-- `--dry-run`: Preview mode
+- `-f, --force`: Force overwrite without prompting
+- `-m, --merge`: Merge with existing content
+- `-b, --backup`: Backup before overwriting
+- `-d, --dry-run`: Preview without making changes
+- `-u, --uninstall`: Remove plugin content
+- `--restore-backup <file>`: Restore from specific backup
 
-### `/standards-config` - Configure Standards
-
+**Examples:**
 ```bash
-/standards-config <module> <option> <value>
+/standards-load              # Interactive installation
+/standards-load --merge      # Preserve existing content
+/standards-load --backup     # Safe overwrite with backup
+/standards-load --dry-run    # Preview first
 ```
 
-**Language Configuration:**
-```bash
-/standards-config language --primary en-US
-/standards-config language --style direct
-/standards-config language --comments professional
-```
+### `/standards-uninstall`
 
-**Work Principles Configuration:**
-```bash
-/standards-config principles --quality-gate strict
-/standards-config principles --architecture-aware true
-```
-
-**Socratic Dialogue Configuration:**
-```bash
-/standards-config socratic --auto-activate true
-/standards-config socratic --intensity deep
-/standards-config socratic --triggers "why,architecture,best practices"
-```
-
-### `/standards-status` - Check Status
-
-```bash
-/standards-status [options]
-```
+Remove Claude Standards Plugin content from CLAUDE.md.
 
 **Options:**
-- `--detailed`: Show detailed configuration information
-- `--summary`: Show summary information
-- `--json`: JSON format output
-- `--module <name>`: Show specific module status
-- `--usage`: Show usage statistics
+- `--restore-backup <file>`: Restore from specific backup
 
-## ⚙️ Configuration Details
-
-### Language Configuration
-```json
-{
-  "language": {
-    "primary": "en-US",
-    "technical_terms": "keep_english_with_explanation",
-    "comment_style": "professional",
-    "expression_style": {
-      "directness": "high",
-      "sharpness": "high",
-      "zero_fluff": true
-    }
-  }
-}
-```
-
-### Work Principles Configuration
-```json
-{
-  "work_principles": {
-    "context_priority": true,
-    "architecture_awareness": true,
-    "quality_oriented": "strict",
-    "incremental_improvement": true
-  }
-}
-```
-
-### Socratic Dialogue Configuration
-```json
-{
-  "socratic_dialogue": {
-    "enabled": true,
-    "auto_activate": true,
-    "triggers": ["why", "architecture", "best practices", "trade-offs"],
-    "intensity_levels": {
-      "gentle_inquiry": "Reasonable approach, explore optimizations",
-      "deep_questioning": "Potential risks identified, needs justification",
-      "intense_refutation": "Critical flaws found, must challenge"
-    }
-  }
-}
-```
-
-## 🎯 Usage Scenarios
-
-### Code Review
+**Examples:**
 ```bash
-/standards-load --code-review
-```
-- Apply strict quality gate checks
-- Focus on architectural soundness
-- Identify technical debt and performance issues
-- Provide specific improvement recommendations
-
-### Architecture Design
-```bash
-/standards-load --architecture
-```
-- Systematic architectural decision trade-offs
-- In-depth technology selection analysis
-- Design solution comparison and evaluation
-- Long-term maintainability considerations
-
-### Technical Planning
-```bash
-/standards-load --planning
-```
-- Implementation path design
-- Technical debt management strategies
-- Team capability matching assessment
-- Migration risk analysis
-
-### Debugging
-```bash
-/standards-load --debugging
-```
-- Systematic problem analysis
-- Root cause localization methodology
-- Debugging strategy development
-- Solution verification
-
-## 🔧 Advanced Features
-
-### Configuration Templates
-```bash
-/standards-config template --list
-/standards-config template --apply startup
-/standards-config template --create --name custom
+/standards-uninstall                  # Remove plugin content
+/standards-uninstall --restore-backup ~/.claude/CLAUDE.md.backup_20250104_120000
 ```
 
-### Team Synchronization
-```bash
-/standards-config sync --team
-/standards-config sync --remote https://github.com/team/standards
-```
+## 💡 Best Practices
 
-### Configuration Import/Export
-```bash
-/standards-config export --file my-standards.json
-/standards-config import --file my-standards.json
-```
+### When to Use Merge
 
-## 📊 Quality Checks
+Use `--merge` if you:
+- Have existing custom standards in `~/.claude/CLAUDE.md`
+- Want to combine personal preferences with plugin standards
+- Need to preserve existing configuration
 
-### Automatic Quality Checks
-The plugin automatically triggers quality checks in the following situations:
-- After code editing (PostToolUse)
-- During technical documentation analysis (PreToolUse)
-- When user prompts contain deep discussion keywords (UserPrompt)
+### When to Use Backup
 
-### Quality Check Rules
-- **Architecture Decay Detection**: Complexity, coupling, code duplication
-- **Technical Debt Thresholds**: TODO comments, deprecated APIs, security issues
-- **Maintainability Checks**: Long methods, deep nesting, naming conventions
+Use `--backup` if you:
+- Want a safety net before overwriting
+- Plan to experiment with plugin standards
+- May need to roll back to previous configuration
+
+### When to Force Overwrite
+
+Use `--force` if you:
+- Want only plugin standards (no custom additions)
+- Are reinstalling after uninstallation
+- Want to reset to plugin defaults
 
 ## 🔍 Troubleshooting
 
-### Common Issues
+### Plugin not working
 
-**Plugin Not Activated:**
 ```bash
-# Check plugin status
-/standards-status --check
+# Verify installation
+cat ~/.claude/CLAUDE.md
 
-# Reload plugin
+# Reinstall
 /standards-load --force
 ```
 
-**Configuration Conflicts:**
-```bash
-# Check configuration conflicts
-/standards-config check-conflicts
+### Want to customize standards
 
-# Reset to default configuration
-/standards-config reset --to-default
+```bash
+# Option 1: Edit user-level file directly
+vim ~/.claude/CLAUDE.md
+
+# Option 2: Use merge strategy
+/standards-load --merge
+# Then edit ~/.claude/CLAUDE.md to modify plugin section
 ```
 
-**Language Standards Not Applied:**
-```bash
-# Check language configuration
-/standards-status --module language-standards
+### Multiple backups
 
-# Reapply language standards
-/standards-load --language
+```bash
+# List backups
+ls -la ~/.claude/CLAUDE.md.backup_*
+
+# Restore specific backup
+/standards-uninstall --restore-backup ~/.claude/CLAUDE.md.backup_20250104_120000
 ```
 
-## 🤝 Contributing Guidelines
+## 📁 Plugin Structure
 
-### Development Environment
+```
+claude-standards/
+├── .claude-plugin/
+│   └── plugin.json              # Plugin metadata
+├── commands/
+│   ├── standards-load.md        # Installation command
+│   └── standards-uninstall.md   # Uninstallation command
+├── hooks/
+│   └── hooks.json               # (Empty - not used)
+├── prompts/
+│   └── prompts.md               # Complete standards content
+├── scripts/
+│   └── apply-standards.py       # Installation script
+└── README.md                    # This file
+```
+
+## 🎯 Design Philosophy
+
+This plugin follows a "simple is better" philosophy:
+
+- **One-time setup**: Install once, use everywhere
+- **No complexity**: No modules, scenarios, or configurations
+- **Safe defaults**: Interactive prompts prevent data loss
+- **Easy rollback**: Backup and uninstall support
+- **Global consistency**: Same standards across all projects
+
+## 🔄 Version History
+
+### v2.0.0 (Current)
+- **Simplified**: Removed complex module system
+- **User-level**: Install to `~/.claude/CLAUDE.md` globally
+- **Interactive**: Smart file handling with user prompts
+- **Safe**: Backup and merge strategies
+- **Clean**: Removed non-functional hooks
+
+### v1.0.0
+- Initial release with modular system
+- Project-level installation
+- Complex configuration options
+
+## 🤝 Contributing
+
+Contributions welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Update documentation
+5. Submit a pull request
+
+### Development Setup
+
 ```bash
 git clone https://github.com/wqaetly/ai_agent_for_skill.git
-cd claude_code_plugins/claude-standards
+cd claude-standards
+
+# Edit standards
+vim prompts/prompts.md
+
+# Test locally
+cp -r . ~/.claude/plugins/claude-standards
 ```
-
-### Adding New Standard Modules
-1. Create new `.md` file in `prompts/` directory
-2. Add configuration in `config/default-config.json`
-3. Update module descriptions in `scripts/apply-standards.py`
-4. Test new module functionality
-
-### Submission Guidelines
-- Follow existing code style
-- Update relevant documentation
-- Add test cases
-- Run full tests before submission
 
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details
 
-## 🙏 Acknowledgments
-
-Thanks to the Claude Code team for providing an excellent plugin architecture that makes development standards management possible.
-
 ## 📞 Contact
 
-- Project Homepage: https://github.com/wqaetly/ai_agent_for_skill
-- Issue Reporting: https://github.com/wqaetly/ai_agent_for_skill/issues
-- Email: wqaetly@example.com
+- **Project Homepage**: https://github.com/wqaetly/ai_agent_for_skill
+- **Issues**: https://github.com/wqaetly/ai_agent_for_skill/issues
+- **Email**: wqaetly@example.com
 
 ---
 
-**Empowering Claude Code with Professional Development Standards!** 🚀
+**Simple, Effective Development Standards for Claude Code** 🚀
