@@ -2,29 +2,12 @@
   "name": "claude-standards",
   "version": "1.0.0",
   "description": "Claude Code English development standards plugin - Provides unified English communication, technical dialogue, and code quality standards",
-  "author": "wqaetly",
+  "author": {
+    "name": "wqaetly"
+  },
   "license": "MIT",
   "homepage": "https://github.com/wqaetly/claude-code-plugins",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wqaetly/claude-code-plugins"
-  },
+  "repository": "https://github.com/wqaetly/claude-code-plugins",
   "keywords": ["claude-code", "english standards", "development standards", "code quality", "technical dialogue"],
-  "main": "prompts/language-standards.md",
-  "categories": ["Productivity", "Code Quality", "Development Standards"],
-  "capabilities": [
-    "English communication standards",
-    "Socratic technical dialogue",
-    "Code quality gate management",
-    "Architecture decision trade-off framework",
-    "Technical analysis framework"
-  ],
-  "dependencies": {},
-  "claude": {
-    "min_version": "1.0.0"
-  },
-  "hooks": [
-    "PostSessionStart",
-    "PreToolUse"
-  ]
+  "hooks": "./hooks/hooks.json"
 }

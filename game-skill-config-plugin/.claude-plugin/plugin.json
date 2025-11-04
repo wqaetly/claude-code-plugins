@@ -13,5 +13,6 @@
     "game-mechanics"
   ],
   "homepage": "https://github.com/wqaetly/claude-code-plugins",
-  "license": "MIT"
+  "license": "MIT",
+  "hooks": "./hooks/hooks.json"
 }
